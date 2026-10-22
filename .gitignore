@@ -27,3 +27,11 @@ terraform.rc
 # IDE
 .vscode/
 .idea/
+
+# Terraform local variables and plans
+*.tfvars
+!*.tfvars.example
+*.tfplan
+# Terraform local variable files
+*.tfvars
+!*.tfvars.example
