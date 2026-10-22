@@ -47,11 +47,10 @@ resource "aws_iam_role_policy" "ecr_management" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid    = "DiscoverECR"
+        Sid    = "DiscoverECRRepository"
         Effect = "Allow"
         Action = [
           "ecr:DescribeRepositories",
-          "ecr:DescribeRegistry",
           "ecr:ListTagsForResource",
           "ecr:ListImages",
           "ecr:DescribeImages",
@@ -60,7 +59,7 @@ resource "aws_iam_role_policy" "ecr_management" {
           "ecr:BatchGetImage",
           "ecr:GetRepositoryPolicy"
         ]
-        Resource = "*"
+        Resource = "arn:aws:ecr:${var.aws_region}:${var.aws_account_id}:repository/${var.ecr_repository_name}"
       },
       {
         Sid    = "ManageProjectRepository"
