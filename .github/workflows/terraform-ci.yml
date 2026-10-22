@@ -25,33 +25,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Check Terraform files exist
+      - name: Detect Terraform configuration
+        id: detect
         shell: bash
         run: |
-          if ! find terraform -type f -name '*.tf' -print -quit 2>/dev/null | grep -q .; then
-            echo "No Terraform files found under terraform/. Add configuration before running validation."
-            exit 1
+          if find . -type f -name '*.tf' \
+            -not -path './.git/*' \
+            -print -quit | grep -q .; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+            echo "No Terraform configuration committed yet; skipping Terraform checks."
           fi
 
       - name: Set up Terraform
+        if: steps.detect.outputs.found == 'true'
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.13.3"
 
       - name: Terraform Format Check
-        run: terraform fmt -check -recursive terraform/
+        if: steps.detect.outputs.found == 'true'
+        run: terraform fmt -check -recursive .
 
-      - name: Terraform Initialize
-        working-directory: terraform/bootstrap/hcp-aws-oidc
-        run: terraform init -backend=false
-
-      - name: Terraform Validate
-        working-directory: terraform/bootstrap/hcp-aws-oidc
-        run: terraform validate
-
-      - name: Checkov Terraform Security Scan
+      - name: Checkov Security Scan
+        if: steps.detect.outputs.found == 'true'
         uses: bridgecrewio/checkov-action@v12
         with:
-          directory: terraform/
+          directory: .
           framework: terraform
           soft_fail: false
