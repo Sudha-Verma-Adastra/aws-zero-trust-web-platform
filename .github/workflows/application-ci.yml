@@ -50,5 +50,17 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./application
+          load: true
           push: false
           tags: aws-zero-trust-web-platform:ci
+
+      - name: Scan container image with Trivy
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: aws-zero-trust-web-platform:ci
+          format: table
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
