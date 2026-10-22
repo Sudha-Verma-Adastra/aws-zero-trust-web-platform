@@ -55,7 +55,7 @@ jobs:
           tags: aws-zero-trust-web-platform:ci
 
       - name: Scan container image with Trivy
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: aws-zero-trust-web-platform:ci
           format: table
