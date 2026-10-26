@@ -56,10 +56,13 @@ module "eks" {
   instance_types  = var.eks_node_instance_types
   capacity_type   = "ON_DEMAND"
 
-  desired_size = var.eks_node_desired_size
-  min_size     = var.eks_node_min_size
-  max_size     = var.eks_node_max_size
-  disk_size    = 20
+  desired_size               = var.eks_node_desired_size
+  min_size                   = var.eks_node_min_size
+  max_size                   = var.eks_node_max_size
+  disk_size                  = 20
+  create_iam_roles           = false
+  existing_cluster_role_name = "eksClusterRole"
+  existing_node_role_name    = "AmazonEKSNodeRole"
 
   tags = {
     Component = "eks"
