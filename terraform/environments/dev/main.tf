@@ -59,7 +59,7 @@ module "eks" {
   desired_size               = var.eks_node_desired_size
   min_size                   = var.eks_node_min_size
   max_size                   = var.eks_node_max_size
-  disk_size                  = 12
+  disk_size                  = 20
   create_iam_roles           = false
   existing_cluster_role_name = "eksClusterRole"
   existing_node_role_name    = "AmazonEKSNodeRole"
